@@ -1,0 +1,20 @@
+geth --dev console
+geth --dev --rpc --rpcaddr "0.0.0.0" --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" console
+mist.exe --rpc http://localhost:8545
+-----
+> personal.newAccount("123") // Создаем новый аккаунт с паролем "123"
+"0x07ae7ebb7b9c65b51519fc6561b8a78ad921ed13" // Его адрес
+> eth.accounts // Смотрим список аккаунтов
+["0x07ae7ebb7b9c65b51519fc6561b8a78ad921ed13"]
+> miner.setEtherbase(eth.accounts[0]) // Устанавливаем его в качестве аккаунта для майнинга
+true
+> eth.coinbase // Проверяем
+"0x07ae7ebb7b9c65b51519fc6561b8a78ad921ed13" // Все верно
+> miner.start() // Я запускаю майнер не в первый раз, поэтому у меня номера блоков 31,32,...
+true
+I1005 09:25:44.363901 miner/miner.go:136] Starting mining operation (CPU=2 TOT=3)
+I1005 09:25:44.364247 miner/worker.go:539] commit new work on block 31 with 0 txs & 0 uncles. Took 291.8µs
+> miner.stop()
+true
+> eth.getBalance(eth.coinbase) // Проверим баланс
+15000000000000000000
