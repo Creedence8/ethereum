@@ -52,10 +52,18 @@ stringHolder.setString("Hello my baby, hello my honey!", {from: eth.coinbase});
 команда с отправкой транзакции от этого аккаунта
 > var uselessWorker = contract.new( {from: eth.coinbase, data: bin, gas: 1000000}, function(e, contract) { if (e) { console.log(e); } else { if (contract.address) { console.log ("mined " + contract.address);  } } });
 
- вычисление примерного количества газа, которое потребуется при вызове функции
- > uselessWorker.doWork.estimateGas(1);
+вычисление примерного количества газа, которое потребуется при вызове функции
+> uselessWorker.doWork.estimateGas(1);
  
- какая цена газа будет использоваться
- > web3.fromWei( eth.gasPrice );
+какая цена газа будет использоваться
+> web3.fromWei( eth.gasPrice );
  
- 
+Рассчитаем цену за 100 тысяч циклов с нашей ценой, но измененным лимитом газа (параметр gas). 
+> web3.fromWei( fixedGasPrice * uselessWorker.doWork.estimateGas(100000, {gas: 100000000}) );
+
+Выполним транзакцию с заданием нашего лимита и цены (но перед этим разблокируем аккаунт)
+> transaction = uselessWorker.doWork( 10, { from: eth.coinbase, gas: 42000, gasPrice: fixedGasPrice } );
+
+По номеру транзакции можно отследить ее статус, выполнив:
+> result = web3.eth.getTransactionReceipt(transaction);
+
