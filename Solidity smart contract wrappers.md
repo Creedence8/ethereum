@@ -6,6 +6,6 @@ The web3j Command Line Tools tools ship with a command line utility for generati
 
 Construction and deployment of smart contracts happens with the deploy method:
 >YourSmartContract contract = YourSmartContract.deploy(
-        <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT,
-        <initialValue>,
-        <param1>, ..., <paramN>);
+        web3j, credentials, GAS_PRICE, GAS_LIMIT,
+        initialValue,
+        param1, ..., paramN);
