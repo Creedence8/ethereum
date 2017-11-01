@@ -15,6 +15,10 @@ contract Crowdsale is Ownable {
     uint rate;
     uint restrictedPercent;
     address restricted;
+    uint softcap;
+    uint referencePercent;
+    
+    mapping(address => uint) public balances;
     
     modifier saleIsOn() {
         require(now > start && now < start + period*1 days);
@@ -33,10 +37,12 @@ contract Crowdsale is Ownable {
         period = 28;
         rate = 30 ether;
         hardcap = 10000 ether;
+        softcap = 500 ether;
+        referencePercent = 2;
     }
 
     function createTokens() isUnderHardCap saleIsOn payable {
-        multisig.transfer(msg.value);
+        // multisig.transfer(msg.value);
         uint tokens = rate.mul(msg.value).div(1 ether);
         uint bonusTokens = 0;
         if(now < start + (period * 1 days).div(4)) {
@@ -48,14 +54,42 @@ contract Crowdsale is Ownable {
         }
         tokens += bonusTokens;
         token.mint(msg.sender, tokens);
+        balances[msg.sender] = balances[msg.sender].add(msg.value);
+        if(msg.data.length == 20) {
+        address referer = bytesToAddres(bytes(msg.data));
+        // проверка, чтобы инвестор не начислил бонусы сам себе
+        require(referer != msg.sender);
+        uint refererTokens = tokens.mul(referencePercent).div(100);
+        // начисляем рефереру
+        token.transfer(referer, refererTokens);
+    }
     }
     
     function finishMinting() public onlyOwner {
-    	uint issuedTokenSupply = token.totalSupply();
-    	uint restrictedTokens = issuedTokenSupply.mul(restrictedPercent).div(100 - restrictedPercent);
-    	token.mint(restricted, restrictedTokens);
-        token.finishMinting();
+        if(this.balance > softcap) {
+            multisig.transfer(this.balance);
+            uint issuedTokenSupply = token.totalSupply();
+            uint restrictedTokens = issuedTokenSupply.mul(restrictedPercent).div(100 - restrictedPercent);
+            token.mint(restricted, restrictedTokens);
+            token.finishMinting();
+      }
     }
+    
+    function refund() {
+      require(this.balance < softcap && now > start + period * 1 days);
+      msg.sender.transfer(balances[msg.sender]);
+      balances[msg.sender] = 0;
+    }
+    
+    function bytesToAddress(bytes source) internal pure returns(address) {
+        uint result;
+        uint mul = 1;
+        for(uint i = 20; i > 0; i--) {
+          result += uint8(source[i-1])*mul;
+          mul = mul*256;
+        }
+        return address(result);
+  }
  
     function() external payable {
         createTokens();
