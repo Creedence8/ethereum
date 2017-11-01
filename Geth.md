@@ -1,5 +1,7 @@
 >geth --dev console
+
 >geth --dev --rpc --rpcaddr "0.0.0.0" --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" console
+
 >mist.exe --rpc http://localhost:8545
 -----
 > personal.newAccount("123") // Создаем новый аккаунт с паролем "123"
