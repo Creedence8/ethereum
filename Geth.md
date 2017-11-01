@@ -29,7 +29,10 @@ true
 
 > web3.fromWei( eth.getBalance(eth.coinbase) ) Проверим баланс в ether
 
-======================================================================================================================
+Also if you want to send almost Z ether from X account to adr Y, you would use;
+>eth.sendTransaction({from: x-account, to: y-account, value: web3.toWei(z-value, "ether")})
+---
+
 Приступим к открытию контракта. Присвоим адрес контракта в переменную:
 > var address = "0x65cA73D13a2cc1dB6B92fd04eb4EBE4cEB70c5eC";
 
@@ -46,7 +49,7 @@ true
 > web3.personal.unlockAccount(eth.coinbase);
 
 Запустите setString снова с дополнительной опцией, задающей от какого аккаунта выполнять транзакцию
-stringHolder.setString("Hello my baby, hello my honey!", {from: eth.coinbase});
+>stringHolder.setString("Hello my baby, hello my honey!", {from: eth.coinbase});
 
 можно отследить транзакцию 
 > web3.eth.getTransaction("0x5f9c3a61c79df36776713f7373b902feea802cf6d3903195f8070ff2d376c669");
