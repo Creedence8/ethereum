@@ -23,4 +23,5 @@
 ##  Цифровая подпись
 [Image](http://images.myshared.ru/4/200076/slide_10.jpg "Цифровая подпись")
 
-# [«Криптография в блокчейнах»: о хеш-функциях, ключах и цифровых подписях](https://habrahabr.ru/company/bitfury/blog/327272/)
+# [«Криптография в блокчейнах»: о хеш-функциях, ключах и цифровых подписях](https://habrahabr.ru/company/bitfury/blog/327272/ "Клик")
+# [«Математические основы биткойн-блокчейна](https://habrahabr.ru/company/bitfury/blog/340378/ "Клац")
